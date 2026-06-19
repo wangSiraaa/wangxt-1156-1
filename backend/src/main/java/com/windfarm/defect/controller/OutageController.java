@@ -53,8 +53,9 @@ public class OutageController {
     @GetMapping
     public ResponseEntity<Map<String, Object>> listOutages(
             @Parameter(description = "机组ID") @RequestParam(required = false) Long turbineId,
-            @Parameter(description = "是否仅活动停机") @RequestParam(required = false) Boolean isActive) {
-        List<OutageRecord> outages = outageService.listOutages(turbineId, isActive);
+            @Parameter(description = "是否仅活动停机") @RequestParam(required = false) String isActive) {
+        Boolean activeFilter = parseBoolean(isActive);
+        List<OutageRecord> outages = outageService.listOutages(turbineId, activeFilter);
         Map<String, Object> result = new HashMap<>();
         result.put("code", 200);
         result.put("message", "查询成功");
@@ -96,5 +97,12 @@ public class OutageController {
         result.put("message", "查询成功");
         result.put("data", Map.of("isStopped", isStopped));
         return ResponseEntity.ok(result);
+    }
+
+    private Boolean parseBoolean(String value) {
+        if (value == null || value.isBlank() || "null".equalsIgnoreCase(value)) {
+            return null;
+        }
+        return Boolean.parseBoolean(value);
     }
 }

@@ -150,10 +150,10 @@ public class OutageService {
             return outageRecordRepository.findByTurbineIdAndIsDeletedFalseOrderByCreateTimeDesc(turbineId);
         } else if (isActive != null && isActive) {
             return outageRecordRepository.findByIsActiveTrueAndIsDeletedFalse();
+        } else if (isActive != null && !isActive) {
+            return outageRecordRepository.findByIsActiveFalseAndIsDeletedFalse();
         }
-        return outageRecordRepository.findAll().stream()
-                .filter(o -> !o.getIsDeleted())
-                .toList();
+        return outageRecordRepository.findByIsDeletedFalseOrderByCreateTimeDesc();
     }
 
     public OutageRecord getOutageDetail(Long outageId) {

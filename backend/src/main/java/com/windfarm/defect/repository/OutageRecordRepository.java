@@ -18,6 +18,10 @@ public interface OutageRecordRepository extends JpaRepository<OutageRecord, Long
 
     List<OutageRecord> findByIsActiveTrueAndIsDeletedFalse();
 
+    List<OutageRecord> findByIsActiveFalseAndIsDeletedFalse();
+
+    List<OutageRecord> findByIsDeletedFalseOrderByCreateTimeDesc();
+
     @Query("SELECT o FROM OutageRecord o WHERE o.turbineId = :turbineId AND o.isActive = true AND o.isDeleted = false")
     Optional<OutageRecord> findActiveByTurbineId(@Param("turbineId") Long turbineId);
 

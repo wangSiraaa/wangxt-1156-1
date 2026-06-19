@@ -3,8 +3,8 @@ const outages = {
         const statusFilter = document.getElementById('outage-filter-status')?.value || '';
 
         try {
-            const isActive = statusFilter === 'active' ? true : null;
-            const res = await api.outages.list(null, isActive);
+            const isActive = statusFilter === 'active' ? true : (statusFilter === 'ended' ? false : null);
+        const res = await api.outages.list(null, isActive);
             const outages = res.data || [];
 
             const container = document.getElementById('outage-list');

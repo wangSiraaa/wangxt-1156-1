@@ -113,7 +113,7 @@ const api = {
         list(turbineId, isActive) {
             const params = new URLSearchParams();
             if (turbineId) params.set('turbineId', turbineId);
-            if (isActive !== undefined) params.set('isActive', isActive);
+            if (isActive === true || isActive === false) params.set('isActive', isActive);
             return api.get(`/outages?${params}`);
         },
         get(id) { return api.get(`/outages/${id}`); },
