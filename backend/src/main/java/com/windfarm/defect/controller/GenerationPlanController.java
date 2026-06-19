@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +18,10 @@ import java.util.Map;
 @Tag(name = "发电计划", description = "发电计划管理接口")
 @RestController
 @RequestMapping("/generation-plans")
-@RequiredArgsConstructor
 public class GenerationPlanController {
 
-    private final GenerationPlanService generationPlanService;
+    @Autowired
+    private GenerationPlanService generationPlanService;
 
     @Operation(summary = "创建发电计划")
     @PostMapping

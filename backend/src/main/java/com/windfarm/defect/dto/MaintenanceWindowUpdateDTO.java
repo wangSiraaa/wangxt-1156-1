@@ -1,12 +1,12 @@
 package com.windfarm.defect.dto;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
 public class MaintenanceWindowUpdateDTO {
+
+    public MaintenanceWindowUpdateDTO() {
+    }
 
     private LocalDateTime actualStartTime;
 
@@ -15,4 +15,36 @@ public class MaintenanceWindowUpdateDTO {
     private BigDecimal actualWindSpeed;
 
     private String remark;
+
+    public LocalDateTime getActualStartTime() {
+        return actualStartTime;
+    }
+
+    public void setActualStartTime(LocalDateTime actualStartTime) {
+        this.actualStartTime = actualStartTime;
+    }
+
+    public LocalDateTime getActualEndTime() {
+        return actualEndTime;
+    }
+
+    public void setActualEndTime(LocalDateTime actualEndTime) {
+        this.actualEndTime = actualEndTime;
+    }
+
+    public BigDecimal getActualWindSpeed() {
+        return actualWindSpeed;
+    }
+
+    public void setActualWindSpeed(BigDecimal actualWindSpeed) {
+        this.actualWindSpeed = actualWindSpeed;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }

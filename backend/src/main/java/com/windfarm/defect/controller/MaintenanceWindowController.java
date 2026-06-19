@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +20,10 @@ import java.util.Map;
 @Tag(name = "检修窗口管理", description = "检修窗口评估与管理接口")
 @RestController
 @RequestMapping("/maintenance-windows")
-@RequiredArgsConstructor
 public class MaintenanceWindowController {
 
-    private final MaintenanceWindowService maintenanceWindowService;
+    @Autowired
+    private MaintenanceWindowService maintenanceWindowService;
 
     @Operation(summary = "创建检修窗口", description = "检修班评估并创建停机检修窗口")
     @PostMapping

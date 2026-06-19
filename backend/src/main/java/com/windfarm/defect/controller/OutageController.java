@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +18,10 @@ import java.util.Map;
 @Tag(name = "停机管理", description = "机组停机记录管理接口")
 @RestController
 @RequestMapping("/outages")
-@RequiredArgsConstructor
 public class OutageController {
 
-    private final OutageService outageService;
+    @Autowired
+    private OutageService outageService;
 
     @Operation(summary = "创建停机记录")
     @PostMapping

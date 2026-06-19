@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +21,10 @@ import java.util.Map;
 @Tag(name = "缺陷管理", description = "风电场叶片缺陷复核管理接口")
 @RestController
 @RequestMapping("/defects")
-@RequiredArgsConstructor
 public class DefectController {
 
-    private final DefectService defectService;
+    @Autowired
+    private DefectService defectService;
 
     @Operation(summary = "上传缺陷", description = "无人机巡检员上传叶片缺陷照片和信息")
     @PostMapping

@@ -4,19 +4,19 @@ import com.windfarm.defect.entity.WindTurbine;
 import com.windfarm.defect.enums.TurbineStatus;
 import com.windfarm.defect.exception.BusinessException;
 import com.windfarm.defect.repository.WindTurbineRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class TurbineService {
 
-    private final WindTurbineRepository windTurbineRepository;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TurbineService.class);
+
+    @Autowired
+    private WindTurbineRepository windTurbineRepository;
 
     public List<WindTurbine> listTurbines(String windFarm, TurbineStatus status) {
         if (windFarm != null) {

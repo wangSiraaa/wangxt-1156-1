@@ -12,8 +12,7 @@ import com.windfarm.defect.repository.DefectRecordRepository;
 import com.windfarm.defect.repository.MaintenanceWindowRepository;
 import com.windfarm.defect.repository.OutageRecordRepository;
 import com.windfarm.defect.repository.WindTurbineRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,18 +21,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class OutageService {
 
-    private final OutageRecordRepository outageRecordRepository;
-    private final WindTurbineRepository windTurbineRepository;
-    private final DefectRecordRepository defectRecordRepository;
-    private final MaintenanceWindowRepository maintenanceWindowRepository;
-    private final GenerationPlanService generationPlanService;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(OutageService.class);
 
-    private static final AtomicInteger outageCounter = new AtomicInteger(1);
+    @Autowired
+    private OutageRecordRepository outageRecordRepository;
+    @Autowired
+    private WindTurbineRepository windTurbineRepository;
+    @Autowired
+    private DefectRecordRepository defectRecordRepository;
+    @Autowired
+    private MaintenanceWindowRepository maintenanceWindowRepository;
+    @Autowired
+    private GenerationPlanService generationPlanService;
+
+    private static final AtomicInteger outageCounter = new AtomicInteger(1000);
 
     @Transactional
     public OutageRecord createOutage(OutageCreateDTO dto, String operator) {

@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +19,10 @@ import java.util.Map;
 @Tag(name = "复拍管理", description = "缺陷复拍任务管理接口")
 @RestController
 @RequestMapping("/reshoots")
-@RequiredArgsConstructor
 public class ReshootController {
 
-    private final ReshootService reshootService;
+    @Autowired
+    private ReshootService reshootService;
 
     @Operation(summary = "创建复拍任务")
     @PostMapping

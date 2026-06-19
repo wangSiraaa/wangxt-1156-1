@@ -11,8 +11,7 @@ import com.windfarm.defect.exception.BusinessException;
 import com.windfarm.defect.repository.DefectRecordRepository;
 import com.windfarm.defect.repository.ReshootRecordRepository;
 import com.windfarm.defect.repository.WindTurbineRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,15 +22,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class DefectService {
 
-    private final DefectRecordRepository defectRecordRepository;
-    private final ReshootRecordRepository reshootRecordRepository;
-    private final WindTurbineRepository windTurbineRepository;
-    private final OutageService outageService;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DefectService.class);
+
+    @Autowired
+    private DefectRecordRepository defectRecordRepository;
+    @Autowired
+    private ReshootRecordRepository reshootRecordRepository;
+    @Autowired
+    private WindTurbineRepository windTurbineRepository;
+    @Autowired
+    private OutageService outageService;
 
     @Value("${windfarm.defect.wind-speed-threshold:12.0}")
     private double windSpeedThreshold;
@@ -39,7 +42,7 @@ public class DefectService {
     @Value("${windfarm.defect.max-reshoot-count:2}")
     private int maxReshootCount;
 
-    private static final AtomicInteger defectCounter = new AtomicInteger(1);
+    private static final AtomicInteger defectCounter = new AtomicInteger(1000);
 
     @Transactional
     public DefectRecord uploadDefect(DefectUploadDTO dto, String operator) {

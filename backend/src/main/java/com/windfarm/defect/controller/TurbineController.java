@@ -6,7 +6,7 @@ import com.windfarm.defect.service.TurbineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +17,10 @@ import java.util.Map;
 @Tag(name = "机组管理", description = "风电机组管理接口")
 @RestController
 @RequestMapping("/turbines")
-@RequiredArgsConstructor
 public class TurbineController {
 
-    private final TurbineService turbineService;
+    @Autowired
+    private TurbineService turbineService;
 
     @Operation(summary = "查询机组列表")
     @GetMapping

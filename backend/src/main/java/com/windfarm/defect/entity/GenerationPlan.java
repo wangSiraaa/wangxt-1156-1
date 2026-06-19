@@ -1,7 +1,6 @@
 package com.windfarm.defect.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,7 +8,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Table(name = "generation_plan")
 public class GenerationPlan {
@@ -64,4 +62,135 @@ public class GenerationPlan {
 
     @Column(name = "update_by", length = 50)
     private String updateBy;
+
+    public GenerationPlan() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPlanCode() {
+        return planCode;
+    }
+
+    public void setPlanCode(String planCode) {
+        this.planCode = planCode;
+    }
+
+    public Long getTurbineId() {
+        return turbineId;
+    }
+
+    public void setTurbineId(Long turbineId) {
+        this.turbineId = turbineId;
+    }
+
+    public LocalDate getPlanDate() {
+        return planDate;
+    }
+
+    public void setPlanDate(LocalDate planDate) {
+        this.planDate = planDate;
+    }
+
+    public BigDecimal getPlannedOutput() {
+        return plannedOutput;
+    }
+
+    public void setPlannedOutput(BigDecimal plannedOutput) {
+        this.plannedOutput = plannedOutput;
+    }
+
+    public BigDecimal getPlannedHours() {
+        return plannedHours;
+    }
+
+    public void setPlannedHours(BigDecimal plannedHours) {
+        this.plannedHours = plannedHours;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
+    public LocalDateTime getCancelTime() {
+        return cancelTime;
+    }
+
+    public void setCancelTime(LocalDateTime cancelTime) {
+        this.cancelTime = cancelTime;
+    }
+
+    public BigDecimal getActualOutput() {
+        return actualOutput;
+    }
+
+    public void setActualOutput(BigDecimal actualOutput) {
+        this.actualOutput = actualOutput;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
 }

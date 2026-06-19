@@ -10,8 +10,7 @@ import com.windfarm.defect.exception.BusinessException;
 import com.windfarm.defect.repository.MaintenanceWindowRepository;
 import com.windfarm.defect.repository.OutageRecordRepository;
 import com.windfarm.defect.repository.WindTurbineRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,20 +20,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class MaintenanceWindowService {
 
-    private final MaintenanceWindowRepository maintenanceWindowRepository;
-    private final WindTurbineRepository windTurbineRepository;
-    private final OutageRecordRepository outageRecordRepository;
-    private final OutageService outageService;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MaintenanceWindowService.class);
+
+    @Autowired
+    private MaintenanceWindowRepository maintenanceWindowRepository;
+    @Autowired
+    private WindTurbineRepository windTurbineRepository;
+    @Autowired
+    private OutageRecordRepository outageRecordRepository;
+    @Autowired
+    private OutageService outageService;
 
     @Value("${windfarm.defect.wind-speed-threshold:12.0}")
     private double windSpeedThreshold;
 
-    private static final AtomicInteger windowCounter = new AtomicInteger(1);
+    private static final AtomicInteger windowCounter = new AtomicInteger(1000);
 
     @Transactional
     public MaintenanceWindow createWindow(MaintenanceWindowCreateDTO dto, String operator) {

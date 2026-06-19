@@ -1,14 +1,12 @@
 package com.windfarm.defect.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Table(name = "reshoot_record")
 public class ReshootRecord {
@@ -75,4 +73,166 @@ public class ReshootRecord {
 
     @Column(name = "update_by", length = 50)
     private String updateBy;
+
+    public ReshootRecord() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getReshootCode() {
+        return reshootCode;
+    }
+
+    public void setReshootCode(String reshootCode) {
+        this.reshootCode = reshootCode;
+    }
+
+    public Long getDefectId() {
+        return defectId;
+    }
+
+    public void setDefectId(Long defectId) {
+        this.defectId = defectId;
+    }
+
+    public Long getTurbineId() {
+        return turbineId;
+    }
+
+    public void setTurbineId(Long turbineId) {
+        this.turbineId = turbineId;
+    }
+
+    public String getReshootReason() {
+        return reshootReason;
+    }
+
+    public void setReshootReason(String reshootReason) {
+        this.reshootReason = reshootReason;
+    }
+
+    public LocalDateTime getScheduledTime() {
+        return scheduledTime;
+    }
+
+    public void setScheduledTime(LocalDateTime scheduledTime) {
+        this.scheduledTime = scheduledTime;
+    }
+
+    public LocalDateTime getActualTime() {
+        return actualTime;
+    }
+
+    public void setActualTime(LocalDateTime actualTime) {
+        this.actualTime = actualTime;
+    }
+
+    public BigDecimal getWindSpeedScheduled() {
+        return windSpeedScheduled;
+    }
+
+    public void setWindSpeedScheduled(BigDecimal windSpeedScheduled) {
+        this.windSpeedScheduled = windSpeedScheduled;
+    }
+
+    public BigDecimal getWindSpeedActual() {
+        return windSpeedActual;
+    }
+
+    public void setWindSpeedActual(BigDecimal windSpeedActual) {
+        this.windSpeedActual = windSpeedActual;
+    }
+
+    public String getPhotoUrls() {
+        return photoUrls;
+    }
+
+    public void setPhotoUrls(String photoUrls) {
+        this.photoUrls = photoUrls;
+    }
+
+    public String getReshootResult() {
+        return reshootResult;
+    }
+
+    public void setReshootResult(String reshootResult) {
+        this.reshootResult = reshootResult;
+    }
+
+    public String getReshootOperator() {
+        return reshootOperator;
+    }
+
+    public void setReshootOperator(String reshootOperator) {
+        this.reshootOperator = reshootOperator;
+    }
+
+    public Integer getReshootOrder() {
+        return reshootOrder;
+    }
+
+    public void setReshootOrder(Integer reshootOrder) {
+        this.reshootOrder = reshootOrder;
+    }
+
+    public Boolean getIsCompleted() {
+        return isCompleted;
+    }
+
+    public void setIsCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
 }

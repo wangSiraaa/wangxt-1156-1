@@ -2,14 +2,12 @@ package com.windfarm.defect.entity;
 
 import com.windfarm.defect.enums.TurbineStatus;
 import jakarta.persistence.*;
-import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Table(name = "wind_turbine")
 public class WindTurbine {
@@ -62,4 +60,126 @@ public class WindTurbine {
 
     @Column(name = "update_by", length = 50)
     private String updateBy;
+
+    public WindTurbine() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTurbineCode() {
+        return turbineCode;
+    }
+
+    public void setTurbineCode(String turbineCode) {
+        this.turbineCode = turbineCode;
+    }
+
+    public String getTurbineName() {
+        return turbineName;
+    }
+
+    public void setTurbineName(String turbineName) {
+        this.turbineName = turbineName;
+    }
+
+    public String getWindFarm() {
+        return windFarm;
+    }
+
+    public void setWindFarm(String windFarm) {
+        this.windFarm = windFarm;
+    }
+
+    public BigDecimal getCapacityKw() {
+        return capacityKw;
+    }
+
+    public void setCapacityKw(BigDecimal capacityKw) {
+        this.capacityKw = capacityKw;
+    }
+
+    public Integer getBladeCount() {
+        return bladeCount;
+    }
+
+    public void setBladeCount(Integer bladeCount) {
+        this.bladeCount = bladeCount;
+    }
+
+    public BigDecimal getTowerHeight() {
+        return towerHeight;
+    }
+
+    public void setTowerHeight(BigDecimal towerHeight) {
+        this.towerHeight = towerHeight;
+    }
+
+    public TurbineStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TurbineStatus status) {
+        this.status = status;
+    }
+
+    public String getLocationDesc() {
+        return locationDesc;
+    }
+
+    public void setLocationDesc(String locationDesc) {
+        this.locationDesc = locationDesc;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
 }

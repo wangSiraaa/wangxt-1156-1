@@ -8,8 +8,7 @@ import com.windfarm.defect.enums.DefectStatus;
 import com.windfarm.defect.exception.BusinessException;
 import com.windfarm.defect.repository.DefectRecordRepository;
 import com.windfarm.defect.repository.ReshootRecordRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +18,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class ReshootService {
 
-    private final ReshootRecordRepository reshootRecordRepository;
-    private final DefectRecordRepository defectRecordRepository;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ReshootService.class);
+
+    @Autowired
+    private ReshootRecordRepository reshootRecordRepository;
+    @Autowired
+    private DefectRecordRepository defectRecordRepository;
 
     @Value("${windfarm.defect.wind-speed-threshold:12.0}")
     private double windSpeedThreshold;
@@ -33,7 +34,7 @@ public class ReshootService {
     @Value("${windfarm.defect.max-reshoot-count:2}")
     private int maxReshootCount;
 
-    private static final AtomicInteger reshootCounter = new AtomicInteger(1);
+    private static final AtomicInteger reshootCounter = new AtomicInteger(1000);
 
     @Transactional
     public ReshootRecord createReshoot(ReshootCreateDTO dto, String operator) {

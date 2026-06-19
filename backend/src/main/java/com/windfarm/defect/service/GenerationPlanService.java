@@ -7,8 +7,7 @@ import com.windfarm.defect.exception.BusinessException;
 import com.windfarm.defect.repository.GenerationPlanRepository;
 import com.windfarm.defect.repository.OutageRecordRepository;
 import com.windfarm.defect.repository.WindTurbineRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,16 +16,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class GenerationPlanService {
 
-    private final GenerationPlanRepository generationPlanRepository;
-    private final WindTurbineRepository windTurbineRepository;
-    private final OutageRecordRepository outageRecordRepository;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(GenerationPlanService.class);
 
-    private static final AtomicInteger planCounter = new AtomicInteger(1);
+    @Autowired
+    private GenerationPlanRepository generationPlanRepository;
+    @Autowired
+    private WindTurbineRepository windTurbineRepository;
+    @Autowired
+    private OutageRecordRepository outageRecordRepository;
+
+    private static final AtomicInteger planCounter = new AtomicInteger(1000);
 
     @Transactional
     public GenerationPlan createPlan(GenerationPlanCreateDTO dto, String operator) {
