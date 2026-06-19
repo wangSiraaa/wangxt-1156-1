@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>风电场叶片缺陷复核系统</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">🌬️ 风电场叶片缺陷复核系统</h1>
+                <div class="user-info">
+                    <select id="roleSelector" onchange="switchRole(this.value)">
+                        <option value="drone_inspector">无人机巡检员</option>
+                        <option value="maintenance_team">检修班</option>
+                        <option value="station_manager">场站负责人</option>
+                    </select>
+                </div>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" onclick="showPage('dashboard')">仪表板</button>
+                <button class="nav-tab" onclick="showPage('defects')">缺陷管理</button>
+                <button class="nav-tab" onclick="showPage('reshoots')">复拍管理</button>
+                <button class="nav-tab" onclick="showPage('windows')">检修窗口</button>
+                <button class="nav-tab" onclick="showPage('outages')">停机记录</button>
+                <button class="nav-tab" onclick="showPage('turbines')">机组管理</button>
+                <button class="nav-tab" onclick="showPage('plans')">发电计划</button>
+            </nav>
+        </header>
+
+        <main class="app-main">
+            <!-- 仪表板 -->
+            <div id="page-dashboard" class="page active">
+                <h2>仪表板</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🔍</div>
+                        <div class="stat-info">
+                            <div class="stat-label">待评估缺陷</div>
+                            <div class="stat-value" id="stat-pending-eval">-</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📷</div>
+                        <div class="stat-info">
+                            <div class="stat-label">待复拍缺陷</div>
+                            <div class="stat-value" id="stat-pending-reshoot">-</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔧</div>
+                        <div class="stat-info">
+                            <div class="stat-label">待检修缺陷</div>
+                            <div class="stat-value" id="stat-pending-maint">-</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏹️</div>
+                        <div class="stat-info">
+                            <div class="stat-label">停机机组</div>
+                            <div class="stat-value" id="stat-stopped">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-section">
+                    <h3>最新缺陷</h3>
+                    <div id="latest-defects" class="data-list"></div>
+                </div>
+                <div class="dashboard-section">
+                    <h3>待办复拍任务</h3>
+                    <div id="pending-reshoots" class="data-list"></div>
+                </div>
+            </div>
+
+            <!-- 缺陷管理 -->
+            <div id="page-defects" class="page">
+                <div class="page-header">
+                    <h2>缺陷管理</h2>
+                    <button class="btn-primary" onclick="showDefectForm()">📤 上传缺陷</button>
+                </div>
+                <div class="filter-bar">
+                    <select id="defect-filter-status" onchange="loadDefects()">
+                        <option value="">全部状态</option>
+                        <option value="PENDING_EVALUATION">待评估</option>
+                        <option value="PENDING_RESHOOT">待复拍</option>
+                        <option value="PENDING_MAINTENANCE">待检修</option>
+                        <option value="CONFIRMED">已确认</option>
+                        <option value="CLOSED">已关闭</option>
+                        <option value="FALSE_ALARM">误报</option>
+                    </select>
+                    <select id="defect-filter-turbine" onchange="loadDefects()">
+                        <option value="">全部机组</option>
+                    </select>
+                </div>
+                <div id="defect-list" class="data-table-container"></div>
+            </div>
+
+            <!-- 复拍管理 -->
+            <div id="page-reshoots" class="page">
+                <h2>复拍管理</h2>
+                <div class="filter-bar">
+                    <select id="reshoot-filter-turbine" onchange="loadReshoots()">
+                        <option value="">全部机组</option>
+                    </select>
+                    <select id="reshoot-filter-status" onchange="loadReshoots()">
+                        <option value="">全部状态</option>
+                        <option value="pending">待完成</option>
+                        <option value="completed">已完成</option>
+                    </select>
+                </div>
+                <div id="reshoot-list" class="data-table-container"></div>
+            </div>
+
+            <!-- 检修窗口 -->
+            <div id="page-windows" class="page">
+                <div class="page-header">
+                    <h2>检修窗口管理</h2>
+                    <button class="btn-primary" onclick="showWindowForm()">➕ 创建窗口</button>
+                </div>
+                <div class="filter-bar">
+                    <select id="window-filter-status" onchange="loadWindows()">
+                        <option value="">全部状态</option>
+                        <option value="PROPOSED">待评估</option>
+                        <option value="CONFIRMED">已确认</option>
+                        <option value="IN_PROGRESS">进行中</option>
+                        <option value="COMPLETED">已完成</option>
+                        <option value="CANCELLED">已取消</option>
+                    </select>
+                </div>
+                <div id="window-list" class="data-table-container"></div>
+            </div>
+
+            <!-- 停机记录 -->
+            <div id="page-outages" class="page">
+                <h2>停机记录</h2>
+                <div class="filter-bar">
+                    <select id="outage-filter-status" onchange="loadOutages()">
+                        <option value="">全部</option>
+                        <option value="active">活动停机</option>
+                    </select>
+                </div>
+                <div id="outage-list" class="data-table-container"></div>
+            </div>
+
+            <!-- 机组管理 -->
+            <div id="page-turbines" class="page">
+                <h2>机组管理</h2>
+                <div id="turbine-list" class="data-table-container"></div>
+            </div>
+
+            <!-- 发电计划 -->
+            <div id="page-plans" class="page">
+                <div class="page-header">
+                    <h2>发电计划</h2>
+                    <button class="btn-primary" onclick="showPlanForm()">➕ 新建计划</button>
+                </div>
+                <div id="plan-list" class="data-table-container"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 缺陷详情模态框 -->
+    <div id="defect-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">缺陷详情</h3>
+                <button class="modal-close" onclick="closeModal('defect-modal')">&times;</button>
+            </div>
+            <div class="modal-body" id="defect-detail-content"></div>
+            <div class="modal-footer" id="defect-modal-actions"></div>
+        </div>
+    </div>
+
+    <!-- 上传缺陷表单模态框 -->
+    <div id="defect-form-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>上传缺陷</h3>
+                <button class="modal-close" onclick="closeModal('defect-form-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="defect-form" onsubmit="submitDefectForm(event)">
+                    <div class="form-group">
+                        <label>机组 <span class="required">*</span></label>
+                        <select id="form-turbine" required>
+                            <option value="">请选择机组</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>叶片编号 <span class="required">*</span></label>
+                        <select id="form-blade" required>
+                            <option value="1">1号叶片</option>
+                            <option value="2">2号叶片</option>
+                            <option value="3">3号叶片</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>叶片位置</label>
+                        <input type="text" id="form-position" placeholder="如：叶片前缘中部">
+                    </div>
+                    <div class="form-group">
+                        <label>缺陷类型</label>
+                        <select id="form-type">
+                            <option value="CRACK_SUSPECTED">疑似裂纹</option>
+                            <option value="SURFACE_CRACK">表面裂纹</option>
+                            <option value="INTERNAL_CRACK">内部裂纹</option>
+                            <option value="CORROSION">腐蚀</option>
+                            <option value="ABRASION">磨损</option>
+                            <option value="LIGHTNING_STRIKE">雷击损伤</option>
+                            <option value="BLADE_DIRTY">叶片脏污</option>
+                            <option value="PAINT_PEELING">油漆脱落</option>
+                            <option value="OTHER">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>缺陷描述</label>
+                        <textarea id="form-description" rows="3" placeholder="请描述缺陷情况"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>严重程度</label>
+                        <select id="form-severity">
+                            <option value="LOW">低</option>
+                            <option value="MEDIUM">中</option>
+                            <option value="HIGH">高</option>
+                            <option value="CRITICAL">严重</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>照片URL</label>
+                        <input type="text" id="form-photos" placeholder="多个照片URL用逗号分隔">
+                    </div>
+                    <div class="form-group">
+                        <label>巡检风速 (m/s)</label>
+                        <input type="number" id="form-wind-speed" step="0.1" placeholder="如：8.5">
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">提交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 检修窗口表单模态框 -->
+    <div id="window-form-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>创建检修窗口</h3>
+                <button class="modal-close" onclick="closeModal('window-form-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="window-form" onsubmit="submitWindowForm(event)">
+                    <div class="form-group">
+                        <label>机组 <span class="required">*</span></label>
+                        <select id="window-form-turbine" required>
+                            <option value="">请选择机组</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>关联缺陷ID</label>
+                        <input type="number" id="window-form-defect" placeholder="关联的缺陷记录ID">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>计划开始时间</label>
+                            <input type="datetime-local" id="window-form-start">
+                        </div>
+                        <div class="form-group">
+                            <label>计划结束时间</label>
+                            <input type="datetime-local" id="window-form-end">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>预计风速 (m/s)</label>
+                        <input type="number" id="window-form-wind" step="0.1" placeholder="如：6.5">
+                    </div>
+                    <div class="form-group">
+                        <label>窗口类型</label>
+                        <select id="window-form-type">
+                            <option value="SCHEDULED">计划检修</option>
+                            <option value="EMERGENCY">紧急检修</option>
+                            <option value="ROUTINE">例行检修</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>检修内容</label>
+                        <textarea id="window-form-content" rows="3" placeholder="请描述检修内容"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>检修班组</label>
+                        <input type="text" id="window-form-team" placeholder="如：检修一班">
+                    </div>
+                    <div class="form-group">
+                        <label>评估意见</label>
+                        <textarea id="window-form-opinion" rows="2" placeholder="评估意见"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">创建</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 发电计划表单模态框 -->
+    <div id="plan-form-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建发电计划</h3>
+                <button class="modal-close" onclick="closeModal('plan-form-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="plan-form" onsubmit="submitPlanForm(event)">
+                    <div class="form-group">
+                        <label>机组 <span class="required">*</span></label>
+                        <select id="plan-form-turbine" required>
+                            <option value="">请选择机组</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>计划日期</label>
+                        <input type="date" id="plan-form-date">
+                    </div>
+                    <div class="form-group">
+                        <label>计划发电量 (kWh)</label>
+                        <input type="number" id="plan-form-output" placeholder="如：45000">
+                    </div>
+                    <div class="form-group">
+                        <label>计划发电时长 (小时)</label>
+                        <input type="number" id="plan-form-hours" step="0.1" placeholder="如：18">
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea id="plan-form-remark" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">创建</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 提示 -->
+    <div id="toast" class="toast"></div>
+
+    <script src="utils/api.js"></script>
+    <script src="utils/helpers.js"></script>
+    <script src="pages/dashboard.js"></script>
+    <script src="pages/defects.js"></script>
+    <script src="pages/reshoots.js"></script>
+    <script src="pages/windows.js"></script>
+    <script src="pages/outages.js"></script>
+    <script src="pages/turbines.js"></script>
+    <script src="pages/plans.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
