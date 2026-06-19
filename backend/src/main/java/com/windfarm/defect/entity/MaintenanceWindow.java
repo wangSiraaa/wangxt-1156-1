@@ -52,6 +52,33 @@ public class MaintenanceWindow {
     @Column(name = "window_type", length = 20)
     private String windowType;
 
+    @Column(name = "is_reservation", nullable = false)
+    private Boolean isReservation = false;
+
+    @Column(name = "reservation_expire_time")
+    private LocalDateTime reservationExpireTime;
+
+    @Column(name = "work_order_code", length = 50)
+    private String workOrderCode;
+
+    @Column(name = "work_order_url", length = 500)
+    private String workOrderUrl;
+
+    @Column(name = "maintenance_photos", length = 2000)
+    private String maintenancePhotos;
+
+    @Column(name = "review_conclusion", length = 30)
+    private String reviewConclusion;
+
+    @Column(name = "review_opinion", length = 1000)
+    private String reviewOpinion;
+
+    @Column(name = "reviewer", length = 50)
+    private String reviewer;
+
+    @Column(name = "review_time")
+    private LocalDateTime reviewTime;
+
     @Column(name = "maintenance_content", length = 1000)
     private String maintenanceContent;
 
@@ -181,6 +208,78 @@ public class MaintenanceWindow {
 
     public void setWindowType(String windowType) {
         this.windowType = windowType;
+    }
+
+    public Boolean getIsReservation() {
+        return isReservation;
+    }
+
+    public void setIsReservation(Boolean reservation) {
+        isReservation = reservation;
+    }
+
+    public LocalDateTime getReservationExpireTime() {
+        return reservationExpireTime;
+    }
+
+    public void setReservationExpireTime(LocalDateTime reservationExpireTime) {
+        this.reservationExpireTime = reservationExpireTime;
+    }
+
+    public String getWorkOrderCode() {
+        return workOrderCode;
+    }
+
+    public void setWorkOrderCode(String workOrderCode) {
+        this.workOrderCode = workOrderCode;
+    }
+
+    public String getWorkOrderUrl() {
+        return workOrderUrl;
+    }
+
+    public void setWorkOrderUrl(String workOrderUrl) {
+        this.workOrderUrl = workOrderUrl;
+    }
+
+    public String getMaintenancePhotos() {
+        return maintenancePhotos;
+    }
+
+    public void setMaintenancePhotos(String maintenancePhotos) {
+        this.maintenancePhotos = maintenancePhotos;
+    }
+
+    public String getReviewConclusion() {
+        return reviewConclusion;
+    }
+
+    public void setReviewConclusion(String reviewConclusion) {
+        this.reviewConclusion = reviewConclusion;
+    }
+
+    public String getReviewOpinion() {
+        return reviewOpinion;
+    }
+
+    public void setReviewOpinion(String reviewOpinion) {
+        this.reviewOpinion = reviewOpinion;
+    }
+
+    public String getReviewer() {
+        return reviewer;
+    }
+
+    public void setReviewer(String reviewer) {
+        this.reviewer = reviewer;
+    }
+
+    public LocalDateTime getReviewTime() {
+        return reviewTime;
+    }
+
+    public void setReviewTime(LocalDateTime reviewTime) {
+        this.reviewTime = reviewTime;
     }
 
     public String getMaintenanceContent() {

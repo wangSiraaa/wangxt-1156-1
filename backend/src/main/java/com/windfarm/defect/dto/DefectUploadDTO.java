@@ -20,6 +20,12 @@ public class DefectUploadDTO {
 
     private String bladePosition;
 
+    private String bladeMappingInfo;
+
+    private BigDecimal shootingAngle;
+
+    private BigDecimal shootingAzimuth;
+
     private String defectDescription;
 
     private DefectType defectType;
@@ -58,6 +64,30 @@ public class DefectUploadDTO {
 
     public void setBladePosition(String bladePosition) {
         this.bladePosition = bladePosition;
+    }
+
+    public String getBladeMappingInfo() {
+        return bladeMappingInfo;
+    }
+
+    public void setBladeMappingInfo(String bladeMappingInfo) {
+        this.bladeMappingInfo = bladeMappingInfo;
+    }
+
+    public BigDecimal getShootingAngle() {
+        return shootingAngle;
+    }
+
+    public void setShootingAngle(BigDecimal shootingAngle) {
+        this.shootingAngle = shootingAngle;
+    }
+
+    public BigDecimal getShootingAzimuth() {
+        return shootingAzimuth;
+    }
+
+    public void setShootingAzimuth(BigDecimal shootingAzimuth) {
+        this.shootingAzimuth = shootingAzimuth;
     }
 
     public String getDefectDescription() {

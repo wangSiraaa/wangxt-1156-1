@@ -332,6 +332,12 @@ async function submitDefectForm(event) {
         defectDescription: document.getElementById('form-description').value,
         severityLevel: document.getElementById('form-severity').value,
         photoUrls: document.getElementById('form-photos').value,
+        shootingAngle: document.getElementById('form-angle').value 
+            ? Number(document.getElementById('form-angle').value) 
+            : null,
+        shootingAzimuth: document.getElementById('form-azimuth').value 
+            ? Number(document.getElementById('form-azimuth').value) 
+            : null,
         windSpeedInspection: document.getElementById('form-wind-speed').value 
             ? Number(document.getElementById('form-wind-speed').value) 
             : null

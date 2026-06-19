@@ -13,9 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -62,6 +65,13 @@ public class ReshootService {
         reshoot.setReshootCode(generateReshootCode());
         reshoot.setDefectId(dto.getDefectId());
         reshoot.setTurbineId(defect.getTurbineId());
+
+        reshoot.setBladeNumber(dto.getBladeNumber() != null ? dto.getBladeNumber() : defect.getBladeNumber());
+        reshoot.setBladePosition(dto.getBladePosition() != null ? dto.getBladePosition() : defect.getBladePosition());
+        reshoot.setRequiredAngle(dto.getRequiredAngle() != null ? dto.getRequiredAngle() : defect.getShootingAngle());
+        reshoot.setRequiredAzimuth(dto.getRequiredAzimuth() != null ? dto.getRequiredAzimuth() : defect.getShootingAzimuth());
+        reshoot.setAngleTolerance(dto.getAngleTolerance() != null ? dto.getAngleTolerance() : new BigDecimal("5.0"));
+
         reshoot.setReshootReason(dto.getReshootReason());
         reshoot.setScheduledTime(dto.getScheduledTime());
         reshoot.setWindSpeedScheduled(dto.getWindSpeedScheduled());
@@ -71,7 +81,8 @@ public class ReshootService {
         reshoot.setUpdateBy(operator);
 
         ReshootRecord saved = reshootRecordRepository.save(reshoot);
-        log.info("复拍任务创建成功，复拍编号: {}, 缺陷ID: {}", saved.getReshootCode(), dto.getDefectId());
+        log.info("复拍任务创建成功，复拍编号: {}, 缺陷ID: {}, 要求角度: {}°, 方位角: {}°",
+                saved.getReshootCode(), dto.getDefectId(), saved.getRequiredAngle(), saved.getRequiredAzimuth());
         return saved;
     }
 
@@ -89,6 +100,18 @@ public class ReshootService {
             throw new BusinessException("实际风速超过阈值(" + windSpeedThreshold + "m/s)，不允许执行复拍登塔作业");
         }
 
+        reshoot.setActualAngle(dto.getActualAngle());
+        reshoot.setActualAzimuth(dto.getActualAzimuth());
+        reshoot.setComparisonResult(dto.getComparisonResult());
+        reshoot.setComparisonOpinion(dto.getComparisonOpinion());
+
+        boolean angleValid = validateShootingAngle(reshoot);
+        reshoot.setIsAngleValid(angleValid);
+
+        if (!angleValid) {
+            log.warn("复拍角度偏差超出容差范围，复拍ID: {}, 偏差: {}°", reshootId, reshoot.getAngleDeviation());
+        }
+
         reshoot.setActualTime(dto.getActualTime() != null ? dto.getActualTime() : LocalDateTime.now());
         reshoot.setWindSpeedActual(dto.getWindSpeedActual());
         reshoot.setPhotoUrls(dto.getPhotoUrls());
@@ -102,8 +125,51 @@ public class ReshootService {
 
         updateDefectAfterReshoot(reshoot.getDefectId(), operator);
 
-        log.info("复拍任务完成，复拍ID: {}, 缺陷ID: {}", reshootId, reshoot.getDefectId());
+        log.info("复拍任务完成，复拍ID: {}, 缺陷ID: {}, 角度有效: {}, 偏差: {}°",
+                reshootId, reshoot.getDefectId(), angleValid, reshoot.getAngleDeviation());
         return saved;
+    }
+
+    private boolean validateShootingAngle(ReshootRecord reshoot) {
+        if (reshoot.getRequiredAngle() == null || reshoot.getActualAngle() == null) {
+            return true;
+        }
+
+        BigDecimal angleDiff = reshoot.getRequiredAngle().subtract(reshoot.getActualAngle()).abs();
+        BigDecimal azimuthDiff = BigDecimal.ZERO;
+        if (reshoot.getRequiredAzimuth() != null && reshoot.getActualAzimuth() != null) {
+            azimuthDiff = reshoot.getRequiredAzimuth().subtract(reshoot.getActualAzimuth()).abs();
+        }
+
+        BigDecimal totalDeviation = angleDiff.add(azimuthDiff);
+        reshoot.setAngleDeviation(totalDeviation);
+
+        BigDecimal tolerance = reshoot.getAngleTolerance() != null ? reshoot.getAngleTolerance() : new BigDecimal("5.0");
+        return totalDeviation.compareTo(tolerance) <= 0;
+    }
+
+    public Map<String, Object> getReshootComparison(Long reshootId) {
+        ReshootRecord reshoot = reshootRecordRepository.findById(reshootId)
+                .filter(r -> !r.getIsDeleted())
+                .orElseThrow(() -> new BusinessException("复拍记录不存在"));
+
+        DefectRecord defect = defectRecordRepository.findById(reshoot.getDefectId())
+                .filter(d -> !d.getIsDeleted())
+                .orElseThrow(() -> new BusinessException("缺陷记录不存在"));
+
+        Map<String, Object> comparison = new HashMap<>();
+        comparison.put("defect", defect);
+        comparison.put("reshoot", reshoot);
+        comparison.put("originalPhotos", defect.getPhotoUrls());
+        comparison.put("reshootPhotos", reshoot.getPhotoUrls());
+        comparison.put("requiredAngle", reshoot.getRequiredAngle());
+        comparison.put("actualAngle", reshoot.getActualAngle());
+        comparison.put("angleDeviation", reshoot.getAngleDeviation());
+        comparison.put("isAngleValid", reshoot.getIsAngleValid());
+        comparison.put("comparisonResult", reshoot.getComparisonResult());
+        comparison.put("comparisonOpinion", reshoot.getComparisonOpinion());
+
+        return comparison;
     }
 
     private void updateDefectAfterReshoot(Long defectId, String operator) {

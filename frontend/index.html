@@ -232,6 +232,16 @@
                         <label>照片URL</label>
                         <input type="text" id="form-photos" placeholder="多个照片URL用逗号分隔">
                     </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>拍摄角度 (°)</label>
+                            <input type="number" id="form-angle" step="0.1" placeholder="如：45.0">
+                        </div>
+                        <div class="form-group">
+                            <label>拍摄方位角 (°)</label>
+                            <input type="number" id="form-azimuth" step="0.1" placeholder="如：180.0">
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label>巡检风速 (m/s)</label>
                         <input type="number" id="form-wind-speed" step="0.1" placeholder="如：8.5">
@@ -274,6 +284,18 @@
                     <div class="form-group">
                         <label>预计风速 (m/s)</label>
                         <input type="number" id="window-form-wind" step="0.1" placeholder="如：6.5">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="window-form-reservation" onchange="toggleReservationFields()"> 
+                            预约下一可用窗口（风速超限时使用）
+                        </label>
+                    </div>
+                    <div id="reservation-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>预约到期时间</label>
+                            <input type="datetime-local" id="window-form-reservation-expire">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>窗口类型</label>

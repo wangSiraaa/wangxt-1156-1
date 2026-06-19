@@ -84,6 +84,7 @@ const api = {
             return api.get(`/reshoots?${params}`);
         },
         get(id) { return api.get(`/reshoots/${id}`); },
+        getComparison(id) { return api.get(`/reshoots/${id}/comparison`); },
         create(data) { return api.post('/reshoots', data); },
         complete(id, data) { return api.put(`/reshoots/${id}/complete`, data); },
         delete(id) { return api.delete(`/reshoots/${id}`); }
@@ -96,6 +97,11 @@ const api = {
             if (defectId) params.set('defectId', defectId);
             if (status) params.set('status', status);
             return api.get(`/maintenance-windows?${params}`);
+        },
+        findAvailable(turbineId) {
+            const params = new URLSearchParams();
+            if (turbineId) params.set('turbineId', turbineId);
+            return api.get(`/maintenance-windows/available?${params}`);
         },
         get(id) { return api.get(`/maintenance-windows/${id}`); },
         create(data) { return api.post('/maintenance-windows', data); },

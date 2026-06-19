@@ -29,6 +29,26 @@ public class MaintenanceWindowCreateDTO {
 
     private String evaluationOpinion;
 
+    private Boolean isReservation;
+
+    private LocalDateTime reservationExpireTime;
+
+    public Boolean getIsReservation() {
+        return isReservation;
+    }
+
+    public void setIsReservation(Boolean isReservation) {
+        this.isReservation = isReservation;
+    }
+
+    public LocalDateTime getReservationExpireTime() {
+        return reservationExpireTime;
+    }
+
+    public void setReservationExpireTime(LocalDateTime reservationExpireTime) {
+        this.reservationExpireTime = reservationExpireTime;
+    }
+
     public Long getTurbineId() {
         return turbineId;
     }

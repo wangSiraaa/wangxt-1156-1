@@ -87,4 +87,16 @@ public class ReshootController {
         result.put("message", "删除成功");
         return ResponseEntity.ok(result);
     }
+
+    @Operation(summary = "复拍比对", description = "获取原始照片和复拍照片的比对结果")
+    @GetMapping("/{reshootId}/comparison")
+    public ResponseEntity<Map<String, Object>> getReshootComparison(
+            @Parameter(description = "复拍ID") @PathVariable Long reshootId) {
+        Map<String, Object> comparison = reshootService.getReshootComparison(reshootId);
+        Map<String, Object> result = new HashMap<>();
+        result.put("code", 200);
+        result.put("message", "查询成功");
+        result.put("data", comparison);
+        return ResponseEntity.ok(result);
+    }
 }

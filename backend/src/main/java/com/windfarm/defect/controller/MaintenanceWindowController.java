@@ -130,4 +130,16 @@ public class MaintenanceWindowController {
         result.put("data", Map.of("canClimb", canClimb, "windSpeed", windSpeed));
         return ResponseEntity.ok(result);
     }
+
+    @Operation(summary = "查询可用检修窗口", description = "查询风速符合要求、未过期的可用检修窗口")
+    @GetMapping("/available")
+    public ResponseEntity<Map<String, Object>> findAvailableWindows(
+            @Parameter(description = "机组ID") @RequestParam(required = false) Long turbineId) {
+        List<MaintenanceWindow> windows = maintenanceWindowService.findAvailableWindows(turbineId);
+        Map<String, Object> result = new HashMap<>();
+        result.put("code", 200);
+        result.put("message", "查询成功");
+        result.put("data", windows);
+        return ResponseEntity.ok(result);
+    }
 }

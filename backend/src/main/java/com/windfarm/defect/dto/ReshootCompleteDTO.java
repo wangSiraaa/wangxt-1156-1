@@ -8,6 +8,14 @@ public class ReshootCompleteDTO {
     public ReshootCompleteDTO() {
     }
 
+    private BigDecimal actualAngle;
+
+    private BigDecimal actualAzimuth;
+
+    private String comparisonResult;
+
+    private String comparisonOpinion;
+
     private LocalDateTime actualTime;
 
     private BigDecimal windSpeedActual;
@@ -17,6 +25,38 @@ public class ReshootCompleteDTO {
     private String reshootResult;
 
     private String remark;
+
+    public BigDecimal getActualAngle() {
+        return actualAngle;
+    }
+
+    public void setActualAngle(BigDecimal actualAngle) {
+        this.actualAngle = actualAngle;
+    }
+
+    public BigDecimal getActualAzimuth() {
+        return actualAzimuth;
+    }
+
+    public void setActualAzimuth(BigDecimal actualAzimuth) {
+        this.actualAzimuth = actualAzimuth;
+    }
+
+    public String getComparisonResult() {
+        return comparisonResult;
+    }
+
+    public void setComparisonResult(String comparisonResult) {
+        this.comparisonResult = comparisonResult;
+    }
+
+    public String getComparisonOpinion() {
+        return comparisonOpinion;
+    }
+
+    public void setComparisonOpinion(String comparisonOpinion) {
+        this.comparisonOpinion = comparisonOpinion;
+    }
 
     public LocalDateTime getActualTime() {
         return actualTime;

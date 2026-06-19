@@ -59,6 +59,10 @@ public class DefectService {
         defect.setReshootCount(0);
         defect.setNeedReshoot(false);
 
+        String bladeMappingInfo = generateBladeMappingInfo(dto);
+        defect.setBladeMappingInfo(bladeMappingInfo);
+        log.info("缺陷位置已映射到叶片编号: {}, 映射信息: {}", dto.getBladeNumber(), bladeMappingInfo);
+
         if (isCrackType(dto.getDefectType())) {
             defect.setNeedReshoot(true);
             defect.setStatus(DefectStatus.PENDING_RESHOOT);
@@ -68,6 +72,22 @@ public class DefectService {
         DefectRecord saved = defectRecordRepository.save(defect);
         log.info("缺陷上传成功，缺陷编号: {}, 机组ID: {}", saved.getDefectCode(), saved.getTurbineId());
         return saved;
+    }
+
+    private String generateBladeMappingInfo(DefectUploadDTO dto) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("机组ID: ").append(dto.getTurbineId());
+        sb.append(", 叶片编号: ").append(dto.getBladeNumber());
+        if (dto.getBladePosition() != null) {
+            sb.append(", 叶片位置: ").append(dto.getBladePosition());
+        }
+        if (dto.getShootingAngle() != null) {
+            sb.append(", 拍摄角度: ").append(dto.getShootingAngle()).append("°");
+        }
+        if (dto.getShootingAzimuth() != null) {
+            sb.append(", 方位角: ").append(dto.getShootingAzimuth()).append("°");
+        }
+        return sb.toString();
     }
 
     @Transactional

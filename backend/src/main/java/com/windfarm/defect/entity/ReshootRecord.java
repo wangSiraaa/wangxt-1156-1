@@ -24,6 +24,39 @@ public class ReshootRecord {
     @Column(name = "turbine_id", nullable = false)
     private Long turbineId;
 
+    @Column(name = "blade_number")
+    private Integer bladeNumber;
+
+    @Column(name = "blade_position", length = 50)
+    private String bladePosition;
+
+    @Column(name = "required_angle")
+    private BigDecimal requiredAngle;
+
+    @Column(name = "required_azimuth")
+    private BigDecimal requiredAzimuth;
+
+    @Column(name = "actual_angle")
+    private BigDecimal actualAngle;
+
+    @Column(name = "actual_azimuth")
+    private BigDecimal actualAzimuth;
+
+    @Column(name = "angle_tolerance")
+    private BigDecimal angleTolerance = new BigDecimal("5.0");
+
+    @Column(name = "angle_deviation")
+    private BigDecimal angleDeviation;
+
+    @Column(name = "comparison_result", length = 20)
+    private String comparisonResult;
+
+    @Column(name = "comparison_opinion", length = 1000)
+    private String comparisonOpinion;
+
+    @Column(name = "is_angle_valid")
+    private Boolean isAngleValid;
+
     @Column(name = "reshoot_reason", length = 500)
     private String reshootReason;
 
@@ -106,6 +139,94 @@ public class ReshootRecord {
 
     public void setTurbineId(Long turbineId) {
         this.turbineId = turbineId;
+    }
+
+    public Integer getBladeNumber() {
+        return bladeNumber;
+    }
+
+    public void setBladeNumber(Integer bladeNumber) {
+        this.bladeNumber = bladeNumber;
+    }
+
+    public String getBladePosition() {
+        return bladePosition;
+    }
+
+    public void setBladePosition(String bladePosition) {
+        this.bladePosition = bladePosition;
+    }
+
+    public BigDecimal getRequiredAngle() {
+        return requiredAngle;
+    }
+
+    public void setRequiredAngle(BigDecimal requiredAngle) {
+        this.requiredAngle = requiredAngle;
+    }
+
+    public BigDecimal getRequiredAzimuth() {
+        return requiredAzimuth;
+    }
+
+    public void setRequiredAzimuth(BigDecimal requiredAzimuth) {
+        this.requiredAzimuth = requiredAzimuth;
+    }
+
+    public BigDecimal getActualAngle() {
+        return actualAngle;
+    }
+
+    public void setActualAngle(BigDecimal actualAngle) {
+        this.actualAngle = actualAngle;
+    }
+
+    public BigDecimal getActualAzimuth() {
+        return actualAzimuth;
+    }
+
+    public void setActualAzimuth(BigDecimal actualAzimuth) {
+        this.actualAzimuth = actualAzimuth;
+    }
+
+    public BigDecimal getAngleTolerance() {
+        return angleTolerance;
+    }
+
+    public void setAngleTolerance(BigDecimal angleTolerance) {
+        this.angleTolerance = angleTolerance;
+    }
+
+    public BigDecimal getAngleDeviation() {
+        return angleDeviation;
+    }
+
+    public void setAngleDeviation(BigDecimal angleDeviation) {
+        this.angleDeviation = angleDeviation;
+    }
+
+    public String getComparisonResult() {
+        return comparisonResult;
+    }
+
+    public void setComparisonResult(String comparisonResult) {
+        this.comparisonResult = comparisonResult;
+    }
+
+    public String getComparisonOpinion() {
+        return comparisonOpinion;
+    }
+
+    public void setComparisonOpinion(String comparisonOpinion) {
+        this.comparisonOpinion = comparisonOpinion;
+    }
+
+    public Boolean getIsAngleValid() {
+        return isAngleValid;
+    }
+
+    public void setIsAngleValid(Boolean angleValid) {
+        isAngleValid = angleValid;
     }
 
     public String getReshootReason() {

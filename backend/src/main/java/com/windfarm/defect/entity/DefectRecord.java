@@ -32,6 +32,15 @@ public class DefectRecord {
     @Column(name = "blade_position", length = 50)
     private String bladePosition;
 
+    @Column(name = "blade_mapping_info", length = 500)
+    private String bladeMappingInfo;
+
+    @Column(name = "shooting_angle")
+    private BigDecimal shootingAngle;
+
+    @Column(name = "shooting_azimuth")
+    private BigDecimal shootingAzimuth;
+
     @Column(name = "defect_description", length = 1000)
     private String defectDescription;
 
@@ -147,6 +156,30 @@ public class DefectRecord {
 
     public void setBladePosition(String bladePosition) {
         this.bladePosition = bladePosition;
+    }
+
+    public String getBladeMappingInfo() {
+        return bladeMappingInfo;
+    }
+
+    public void setBladeMappingInfo(String bladeMappingInfo) {
+        this.bladeMappingInfo = bladeMappingInfo;
+    }
+
+    public BigDecimal getShootingAngle() {
+        return shootingAngle;
+    }
+
+    public void setShootingAngle(BigDecimal shootingAngle) {
+        this.shootingAngle = shootingAngle;
+    }
+
+    public BigDecimal getShootingAzimuth() {
+        return shootingAzimuth;
+    }
+
+    public void setShootingAzimuth(BigDecimal shootingAzimuth) {
+        this.shootingAzimuth = shootingAzimuth;
     }
 
     public String getDefectDescription() {

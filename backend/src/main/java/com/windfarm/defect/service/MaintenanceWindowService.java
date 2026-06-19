@@ -43,8 +43,12 @@ public class MaintenanceWindowService {
     public MaintenanceWindow createWindow(MaintenanceWindowCreateDTO dto, String operator) {
         validateTurbineExists(dto.getTurbineId());
 
-        if (dto.getExpectedWindSpeed() != null && dto.getExpectedWindSpeed().doubleValue() > windSpeedThreshold) {
-            throw new BusinessException("预计风速超过阈值(" + windSpeedThreshold + "m/s)，不允许安排登塔检修");
+        boolean isWindSpeedOverLimit = dto.getExpectedWindSpeed() != null
+                && dto.getExpectedWindSpeed().doubleValue() > windSpeedThreshold;
+
+        if (isWindSpeedOverLimit && !Boolean.TRUE.equals(dto.getIsReservation())) {
+            throw new BusinessException("预计风速超过阈值(" + windSpeedThreshold
+                    + "m/s)，不允许安排登塔检修。如需预约下一可用窗口，请设置isReservation=true");
         }
 
         MaintenanceWindow window = new MaintenanceWindow();
@@ -64,9 +68,24 @@ public class MaintenanceWindowService {
         window.setCreateBy(operator);
         window.setUpdateBy(operator);
 
+        window.setIsReservation(Boolean.TRUE.equals(dto.getIsReservation()));
+        if (Boolean.TRUE.equals(dto.getIsReservation())) {
+            window.setReservationExpireTime(dto.getReservationExpireTime());
+            log.info("创建预约检修窗口，机组ID: {}, 预计风速: {}m/s，预约到期时间: {}",
+                    dto.getTurbineId(), dto.getExpectedWindSpeed(), dto.getReservationExpireTime());
+        }
+
         MaintenanceWindow saved = maintenanceWindowRepository.save(window);
-        log.info("检修窗口创建成功，窗口编号: {}, 机组ID: {}", saved.getWindowCode(), dto.getTurbineId());
+        log.info("检修窗口创建成功，窗口编号: {}, 机组ID: {}, 预约状态: {}",
+                saved.getWindowCode(), dto.getTurbineId(), saved.getIsReservation());
         return saved;
+    }
+
+    public List<MaintenanceWindow> findAvailableWindows(Long turbineId) {
+        List<MaintenanceWindow> windows = maintenanceWindowRepository.findAvailableWindows(
+                turbineId, windSpeedThreshold, LocalDateTime.now());
+        log.info("查询可用检修窗口，机组ID: {}, 可用窗口数: {}", turbineId, windows.size());
+        return windows;
     }
 
     @Transactional
@@ -135,6 +154,15 @@ public class MaintenanceWindowService {
         window.setStatus(WindowStatus.COMPLETED);
         window.setActualEndTime(dto.getActualEndTime() != null ? dto.getActualEndTime() : LocalDateTime.now());
         window.setRemark(dto.getRemark());
+
+        window.setWorkOrderCode(dto.getWorkOrderCode());
+        window.setWorkOrderUrl(dto.getWorkOrderUrl());
+        window.setMaintenancePhotos(dto.getMaintenancePhotos());
+        window.setReviewConclusion(dto.getReviewConclusion());
+        window.setReviewOpinion(dto.getReviewOpinion());
+        window.setReviewer(operator);
+        window.setReviewTime(LocalDateTime.now());
+
         window.setUpdateBy(operator);
 
         MaintenanceWindow saved = maintenanceWindowRepository.save(window);
@@ -153,7 +181,8 @@ public class MaintenanceWindowService {
             }
         }
 
-        log.info("检修窗口已完成，窗口ID: {}", windowId);
+        log.info("检修窗口已完成，窗口ID: {}, 工单编号: {}, 复核结论: {}",
+                windowId, dto.getWorkOrderCode(), dto.getReviewConclusion());
         return saved;
     }
 

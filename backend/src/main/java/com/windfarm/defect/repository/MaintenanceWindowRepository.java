@@ -33,4 +33,15 @@ public interface MaintenanceWindowRepository extends JpaRepository<MaintenanceWi
                                                         @Param("endTime") LocalDateTime endTime);
 
     boolean existsByWindowCode(String windowCode);
+
+    @Query("SELECT w FROM MaintenanceWindow w WHERE w.isDeleted = false " +
+            "AND w.status IN (com.windfarm.defect.enums.WindowStatus.PROPOSED, com.windfarm.defect.enums.WindowStatus.CONFIRMED) " +
+            "AND (w.expectedWindSpeed IS NULL OR w.expectedWindSpeed <= :windSpeedThreshold) " +
+            "AND (w.plannedStartTime >= :now " +
+            "OR (w.isReservation = true AND (w.reservationExpireTime IS NULL OR w.reservationExpireTime >= :now))) " +
+            "AND (:turbineId IS NULL OR w.turbineId = :turbineId) " +
+            "ORDER BY w.plannedStartTime ASC")
+    List<MaintenanceWindow> findAvailableWindows(@Param("turbineId") Long turbineId,
+                                                 @Param("windSpeedThreshold") Double windSpeedThreshold,
+                                                 @Param("now") LocalDateTime now);
 }
